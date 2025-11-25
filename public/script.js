@@ -6,7 +6,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
 }).addTo(map);
 
-// Add marker (will move later)
+// Add marker
 let marker = L.marker([14.5995, 120.9842]).addTo(map);
 
 // Function to fetch latest coords from the backend
@@ -15,16 +15,17 @@ async function fetchLocation() {
     const res = await fetch("/api/update");
     const data = await res.json();
 
-    if (!data.lat || !data.lng) return;
+    // Correct validation
+    if (data.lat === undefined || data.lng === undefined) return;
 
-    // Update the marker position
-    marker.setLatLng([data.lat, data.lng]);
+    const lat = Number(data.lat);
+    const lng = Number(data.lng);
 
-    // Also pan the map smoothly
-    map.panTo([data.lat, data.lng]);
+    // Move marker
+    marker.setLatLng([lat, lng]);
+    map.panTo([lat, lng]);
 
-    console.log("Updated position:", data.lat, data.lng);
-
+    console.log("Updated position:", lat, lng);
   } catch (err) {
     console.error("Error fetching GPS:", err);
   }
@@ -32,3 +33,4 @@ async function fetchLocation() {
 
 // Poll every 3 seconds
 setInterval(fetchLocation, 3000);
+
