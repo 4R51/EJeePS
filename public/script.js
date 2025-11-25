@@ -1,5 +1,5 @@
-// Create the map centered at any default location (will update automatically)
-const map = L.map("map").setView([14.5995, 120.9842], 12);
+// Create the map centered at Ateneo campus
+const map = L.map("map").setView([14.6394, 121.0789], 16);
 
 // Add OpenStreetMap tiles
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -7,7 +7,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 
 // Add marker
-let marker = L.marker([14.5995, 120.9842]).addTo(map);
+let marker = L.marker([14.6394, 121.0789]).addTo(map);
 
 // Function to fetch latest coords from the backend
 async function fetchLocation() {
@@ -33,4 +33,5 @@ async function fetchLocation() {
 
 // Poll every 3 seconds
 setInterval(fetchLocation, 3000);
+
 
