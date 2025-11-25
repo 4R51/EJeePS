@@ -1,38 +1,34 @@
-// Initialize map
-const map = L.map('map').setView([14.0, 121.0], 13);
+// Create the map centered at any default location (will update automatically)
+const map = L.map("map").setView([14.5995, 120.9842], 12);
 
-// Add tile layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+// Add OpenStreetMap tiles
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
 }).addTo(map);
 
-// Marker that will be updated
-let marker = L.marker([14.0, 121.0]).addTo(map);
+// Add marker (will move later)
+let marker = L.marker([14.5995, 120.9842]).addTo(map);
 
-// Update marker location
-async function updateLocation() {
+// Function to fetch latest coords from the backend
+async function fetchLocation() {
   try {
-    const res = await fetch('/api/get-loc');   // <-- your Vercel endpoint
+    const res = await fetch("/api/update");
     const data = await res.json();
 
-    console.log("Received:", data);
-
-    // If backend has no data yet
     if (!data.lat || !data.lng) return;
 
-    const lat = data.lat;
-    const lng = data.lng;
+    // Update the marker position
+    marker.setLatLng([data.lat, data.lng]);
 
-    // Update marker position
-    marker.setLatLng([lat, lng]);
+    // Also pan the map smoothly
+    map.panTo([data.lat, data.lng]);
 
-    // Recenter the map smoothly
-    map.setView([lat, lng], 16);
+    console.log("Updated position:", data.lat, data.lng);
 
   } catch (err) {
-    console.error("Error fetching location:", err);
+    console.error("Error fetching GPS:", err);
   }
 }
 
-// Poll server every 2 seconds
-setInterval(updateLocation, 2000);
+// Poll every 3 seconds
+setInterval(fetchLocation, 3000);
