@@ -5,12 +5,20 @@ export default function handler(req, res) {
 
   const { lat, lng } = req.body;
 
-  if (!lat || !lng) {
+  // Correct validation
+  if (lat === undefined || lng === undefined) {
     return res.status(400).json({ error: "Missing coordinates" });
   }
 
-  // Save coordinates however your frontend reads them
-  globalThis.lastLocation = { lat, lng, timestamp: Date.now() };
+  globalThis.lastLocation = {
+    lat: Number(lat),
+    lng: Number(lng),
+    timestamp: Date.now()
+  };
 
-  res.status(200).json({ status: "OK", lat, lng });
+  res.status(200).json({
+    status: "OK",
+    lat: Number(lat),
+    lng: Number(lng)
+  });
 }
