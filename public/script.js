@@ -1,5 +1,10 @@
 // Create the map centered at Ateneo campus
-const map = L.map("map").setView([14.6394, 121.0789], 16);
+// Fixed map centered at Ateneo campus
+const map = L.map("map", {
+  center: [14.6394, 121.0789],
+  zoom: 16,
+  zoomControl: true
+});
 
 // Add OpenStreetMap tiles
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -15,15 +20,13 @@ async function fetchLocation() {
     const res = await fetch("/api/update");
     const data = await res.json();
 
-    // Correct validation
     if (data.lat === undefined || data.lng === undefined) return;
 
     const lat = Number(data.lat);
     const lng = Number(data.lng);
 
-    // Move marker
+    // Update marker ONLY
     marker.setLatLng([lat, lng]);
-    map.panTo([lat, lng]);
 
     console.log("Updated position:", lat, lng);
   } catch (err) {
@@ -33,5 +36,6 @@ async function fetchLocation() {
 
 // Poll every 3 seconds
 setInterval(fetchLocation, 3000);
+
 
 
