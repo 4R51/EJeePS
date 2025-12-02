@@ -371,11 +371,11 @@ function initPullouts() {
         return;
       }
       
-      // Always start with base positions
+      // Step 1: Always start with base positions for buttons
       toggleA.style.top = baseTopA + 'px';
       toggleB.style.top = baseTopB + 'px';
       
-      // Position Panel A and move Button B if needed
+      // Step 2: Position Panel A and determine if Button B needs to move
       if (panelAOpen) {
         // Position Panel A dropdown below Button A
         const toggleARect = toggleA.getBoundingClientRect();
@@ -394,9 +394,10 @@ function initPullouts() {
         }
       }
       
-      // Position Panel B below its button (which may have moved due to Panel A)
+      // Step 3: Position Panel B below its button (measuring fresh after Button B may have moved)
+      // Force a reflow to ensure Button B's new position is reflected in getBoundingClientRect()
       if (panelBOpen) {
-        // Get fresh rect for Button B (it may have moved)
+        void toggleB.offsetHeight; // Force reflow
         const toggleBRect = toggleB.getBoundingClientRect();
         const panelBTopPos = Math.round(toggleBRect.top - containerRect.top + toggleBRect.height + 8);
         panelB.style.top = panelBTopPos + 'px';
