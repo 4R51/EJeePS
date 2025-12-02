@@ -1,8 +1,17 @@
 // Create the map centered at Ateneo campus
 // Fixed map centered at Ateneo campus
+// Limit map interactions to a tight bounding box around Ateneo (stations)
+// This prevents users from panning too far away and disallows zooming out past level 16
 const map = L.map("map", {
   center: [14.6394, 121.0789],
   zoom: 16,
+  minZoom: 16, // don't allow zooming out past 16
+  // Slightly padded bounds derived from station coords (SW, NE)
+  maxBounds: L.latLngBounds([
+    [14.633675319061712, 121.07404641949906],
+    [14.647212556900775, 121.081723735956],
+  ]),
+  maxBoundsViscosity: 1.0, // make panning constrained to the bounds
   zoomControl: true
 });
 
