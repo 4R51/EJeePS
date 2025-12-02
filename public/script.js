@@ -245,6 +245,8 @@ function initPullouts() {
   const panelB = document.getElementById('sidebar-line-b');
   const listA = document.getElementById('list-line-a');
   const listB = document.getElementById('list-line-b');
+  const wrapperA = document.getElementById('wrapper-stops-a');
+  const wrapperB = document.getElementById('wrapper-stops-b');
 
   function renderList(ul, stops) {
     ul.innerHTML = '';
@@ -259,12 +261,11 @@ function initPullouts() {
       btn.addEventListener('click', () => {
         // Center on the stop and zoom in
         map.setView([s.lat, s.lng], Math.max(17, map.getZoom()), { animate: true });
-        // Close panel after selection
+        // Close panels after selection
         panelA.classList.remove('open');
         panelB.classList.remove('open');
         try { toggleA.setAttribute('aria-expanded', 'false'); } catch (e) {}
         try { toggleB.setAttribute('aria-expanded', 'false'); } catch (e) {}
-        try { repositionToggleButtons(); } catch (e) {}
       });
       li.appendChild(btn);
       ul.appendChild(li);
@@ -274,42 +275,15 @@ function initPullouts() {
   renderList(listA, stations.a);
   renderList(listB, stations.b);
 
-  // Toggle behavior: panels can be open simultaneously
-  function openPanel(panel, toggleBtn) {
-    // show panel and position it next to the toggle as a dropdown
-    panel.classList.add('open');
-    toggleBtn.setAttribute('aria-expanded', 'true');
-
-    try {
-      const pulloutsContainer = document.querySelector('.pullouts');
-      const containerRect = pulloutsContainer.getBoundingClientRect();
-      const tRect = toggleBtn.getBoundingClientRect();
-      // ensure we can measure panel height
-      const panelHeight = panel.offsetHeight || panel.getBoundingClientRect().height || 220;
-      // Prefer showing below the toggle
-      let topPos = Math.round(tRect.top - containerRect.top + tRect.height + 8);
-      // If it would overflow, show above the toggle (if there's space)
-      if (topPos + panelHeight > containerRect.height) {
-        const altTop = Math.round(tRect.top - containerRect.top - panelHeight - 8);
-        topPos = Math.max(8, altTop);
-      }
-      panel.style.top = topPos + 'px';
-    } catch (e) {
-      // ignore measurement errors
-    }
-
-    repositionToggleButtons();
-  }
-
   // Toggle handlers (show/hide panel)
   toggleA.addEventListener('click', () => {
     const isOpen = panelA.classList.contains('open');
     if (isOpen) {
       panelA.classList.remove('open');
       toggleA.setAttribute('aria-expanded', 'false');
-      repositionToggleButtons();
     } else {
-      openPanel(panelA, toggleA);
+      panelA.classList.add('open');
+      toggleA.setAttribute('aria-expanded', 'true');
     }
   });
 
@@ -318,9 +292,9 @@ function initPullouts() {
     if (isOpen) {
       panelB.classList.remove('open');
       toggleB.setAttribute('aria-expanded', 'false');
-      repositionToggleButtons();
     } else {
-      openPanel(panelB, toggleB);
+      panelB.classList.add('open');
+      toggleB.setAttribute('aria-expanded', 'true');
     }
   });
 
@@ -328,88 +302,23 @@ function initPullouts() {
   panelA.querySelector('.pullout-close').addEventListener('click', () => {
     panelA.classList.remove('open');
     toggleA.setAttribute('aria-expanded', 'false');
-    repositionToggleButtons();
   });
   panelB.querySelector('.pullout-close').addEventListener('click', () => {
     panelB.classList.remove('open');
     toggleB.setAttribute('aria-expanded', 'false');
-    repositionToggleButtons();
   });
 
-  // Close dropdowns when clicking outside of toggles/panels
+  // Close dropdowns when clicking outside of wrappers
   document.addEventListener('click', (e) => {
     try {
-      // Only close if clicking completely outside both panels AND both toggles
-      if (!panelA.contains(e.target) && !toggleA.contains(e.target) && !panelB.contains(e.target) && !toggleB.contains(e.target)) {
+      if (!wrapperA.contains(e.target) && !wrapperB.contains(e.target)) {
         panelA.classList.remove('open');
         panelB.classList.remove('open');
         toggleA.setAttribute('aria-expanded', 'false');
         toggleB.setAttribute('aria-expanded', 'false');
-        repositionToggleButtons();
       }
     } catch (err) { /* ignore */ }
   });
-
-  // reposition logic: ensure buttons don't overlap with open panels, and panels move with buttons
-  const pulloutsContainer = document.querySelector('.pullouts');
-  const baseTopA = 12;
-  const baseTopB = 84;
-  const toggleHeight = 48; // approximate height of toggle buttons
-  const toggleGap = 12; // cushion between button and panel
-
-  function repositionToggleButtons() {
-    try {
-      const containerRect = pulloutsContainer.getBoundingClientRect();
-      
-      const panelAOpen = panelA.classList.contains('open');
-      const panelBOpen = panelB.classList.contains('open');
-      
-      if (!panelAOpen && !panelBOpen) {
-        // No panels open, reset to base positions
-        toggleA.style.top = baseTopA + 'px';
-        toggleB.style.top = baseTopB + 'px';
-        return;
-      }
-      
-      // Step 1: Always start with base positions for buttons
-      toggleA.style.top = baseTopA + 'px';
-      toggleB.style.top = baseTopB + 'px';
-      
-      // Step 2: Position Panel A and determine if Button B needs to move
-      if (panelAOpen) {
-        // Position Panel A dropdown below Button A
-        const toggleARect = toggleA.getBoundingClientRect();
-        const panelATopPos = Math.round(toggleARect.top - containerRect.top + toggleARect.height + 8);
-        panelA.style.top = panelATopPos + 'px';
-        
-        // Calculate Panel A's bottom to know where to move Button B
-        const panelARect = panelA.getBoundingClientRect();
-        const panelABottom = panelARect.bottom - containerRect.top;
-        
-        // Move Button B below Panel A if there's overlap
-        if (panelABottom > baseTopB) {
-          const desiredTopForB = Math.ceil(panelABottom + toggleGap);
-          const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
-          toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
-        }
-      }
-      
-      // Step 3: Position Panel B below its button (measuring fresh after Button B may have moved)
-      // Force a reflow to ensure Button B's new position is reflected in getBoundingClientRect()
-      if (panelBOpen) {
-        void toggleB.offsetHeight; // Force reflow
-        const toggleBRect = toggleB.getBoundingClientRect();
-        const panelBTopPos = Math.round(toggleBRect.top - containerRect.top + toggleBRect.height + 8);
-        panelB.style.top = panelBTopPos + 'px';
-      }
-    } catch (err) {
-      // ignore errors
-    }
-  }
-  // expose for global listeners
-  window.repositionToggleButtons = repositionToggleButtons;
-  // ensure toggles are positioned correctly at init
-  repositionToggleButtons();
 }
 
 // initialize pullouts after DOM is ready
@@ -420,11 +329,6 @@ window.addEventListener('load', () => {
     console.warn('Pullouts init failed', err);
   }
 });
-
-  // also reposition toggles on orientation/resize to keep buttons clear of panels
-  window.addEventListener('resize', () => {
-    try { if (typeof repositionToggleButtons === 'function') repositionToggleButtons(); } catch (e) {}
-  });
 
 // Toggle handling
 function setLineVisibility(line, visible) {

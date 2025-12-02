@@ -46,6 +46,11 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 /* --- Stops dropdown panels and buttons (right side) --- */
 .pullouts{position:fixed;right:12px;top:var(--header-height);bottom:18px;z-index:1400;pointer-events:auto}
 
+/* Wrapper containers for button + panel pairs */
+.pullout-toggle-wrapper{position:absolute;right:8px;z-index:1420;pointer-events:auto}
+#wrapper-stops-a{top:12px}
+#wrapper-stops-b{top:84px}
+
 /* Dropdown panels for stop lists */
 .pullout-panel{position:absolute;right:92px;top:0;width:320px;max-height:72vh;background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px;padding:12px;display:none;flex-direction:column;pointer-events:auto;z-index:1410;overflow:auto;transition:opacity 0.2s ease, transform 0.2s ease;opacity:0;visibility:hidden;transform:translateY(-6px)}
 .pullout-panel.open{display:flex;opacity:1;visibility:visible;transform:translateY(0)}
@@ -63,15 +68,15 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .stop-btn:active{background:rgba(3,15,35,0.12)}
 
 /* Stop list toggle buttons */
-.pullout-toggle-btn{position:absolute;right:8px;padding:12px 14px;border-radius:8px;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;z-index:1420;font-weight:700;font-size:14px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+.pullout-toggle-btn{position:absolute;right:8px;padding:12px 14px;border-radius:8px;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
 
 /* Line A button - Ateneo Blue #0033a0 */
-#btn-stops-a{background:var(--ateneo-blue);color:var(--white);top:12px}
+#btn-stops-a{background:var(--ateneo-blue);color:var(--white)}
 #btn-stops-a:hover{background:#002580;box-shadow:0 4px 12px rgba(0,51,160,0.24)}
 #btn-stops-a[aria-expanded="true"]{background:#001a52;color:var(--white)}
 
 /* Line B button - Lighter blue #0265d3 */
-#btn-stops-b{background:#0265d3;color:var(--white);top:84px}
+#btn-stops-b{background:#0265d3;color:var(--white)}
 #btn-stops-b:hover{background:#0250a8;box-shadow:0 4px 12px rgba(2,101,211,0.24)}
 #btn-stops-b[aria-expanded="true"]{background:#013d7a;color:var(--white)}
 
@@ -82,12 +87,6 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Label text */
 .pullout-toggle-btn .pull-label{font-weight:700;color:inherit;font-size:13px;white-space:nowrap}
-
-/* Default positions */
-#btn-stops-a{top:12px}
-#sidebar-line-a{top:0}
-#btn-stops-b{top:84px}
-#sidebar-line-b{top:72px}
 
 /* Responsive adjustments */
 @media (max-width:520px){
