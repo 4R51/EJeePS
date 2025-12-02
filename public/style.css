@@ -54,7 +54,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .pullout-close{position:absolute;top:8px;left:8px;border:0;background:transparent;font-size:14px;padding:6px;cursor:pointer;color:#444}
 
 /* The small vertical tab visible on the right edge */
-.pullout-tab{position:absolute;right:-48px;transform-origin:center;writing-mode:vertical-rl;text-orientation:upright;transform:rotate(180deg);background:var(--ateneo-blue);color:var(--white);padding:6px;border-radius:6px 6px 0 0;width:48px;text-align:center;font-weight:700;border:2px solid rgba(0,0,0,0.06);box-shadow:0 2px 6px rgba(0,0,0,0.12);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.pullout-tab{position:absolute;right:-48px;transform-origin:center;background:var(--ateneo-blue);color:var(--white);padding:6px;border-radius:6px 6px 0 0;width:48px;text-align:center;font-weight:700;border:2px solid rgba(0,0,0,0.06);box-shadow:0 2px 6px rgba(0,0,0,0.12);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
 .pullout-tab:focus{outline:3px solid rgba(0,51,160,0.22)}
 .pullout-tab[aria-expanded="true"]{background:#022c66}
 
@@ -75,7 +75,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Make tab text more readable in vertical mode and ensure strong contrast */
 .pullout-tab .tab-main{display:block;color:var(--white);font-size:12px;line-height:1;text-transform:none;padding:0}
-.pullout-tab .tab-label{display:block;color:var(--white);font-size:12px;font-weight:800;margin:0;padding:0;line-height:1;writing-mode:vertical-rl;text-orientation:upright}
+.pullout-tab .tab-label{display:block;color:var(--white);font-size:11px;font-weight:700;margin:0;padding:0;line-height:1;position:absolute;left:-26px;top:50%;transform:translateY(-50%) rotate(-90deg);white-space:nowrap}
 .pullout-tab .tab-badge{display:block;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-weight:800;margin:3px 0;color:var(--white);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06)}
 .pullout-tab .line-a-badge{background:var(--ateneo-blue);border-color:rgba(255,255,255,0.08)}
 .pullout-tab .line-b-badge{background:#0265d3;border-color:rgba(255,255,255,0.08)}
