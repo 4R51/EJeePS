@@ -14,6 +14,9 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // Add marker
 let marker = L.marker([14.6394, 121.0789]).addTo(map);
 
+// Track the last valid position to keep the marker in place when signal is lost
+let lastValidCoords = { lat: 14.6394, lng: 121.0789 };
+
 // Function to fetch latest coords from the backend
 async function fetchLocation() {
   try {
@@ -25,9 +28,24 @@ async function fetchLocation() {
     const lat = Number(data.lat);
     const lng = Number(data.lng);
 
-    // Update marker ONLY
-    marker.setLatLng([lat, lng]);
+    // Validation helper
+    function isValidLatLng(lat, lng) {
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return false;
+      if (Math.abs(lat) > 90 || Math.abs(lng) > 180) return false;
+      // Ignore obvious invalid sentinel coordinates (0,0)
+      if (lat === 0 && lng === 0) return false;
+      return true;
+    }
 
+    if (!isValidLatLng(lat, lng)) {
+      // GPS/Backend reported invalid coordinates; keep the last known valid marker position
+      console.warn("Received invalid coordinates, keeping last valid coords:", lastValidCoords);
+      return;
+    }
+
+    // Store and apply last-valid
+    lastValidCoords = { lat, lng };
+    marker.setLatLng([lat, lng]);
     console.log("Updated position:", lat, lng);
   } catch (err) {
     console.error("Error fetching GPS:", err);
@@ -36,6 +54,3 @@ async function fetchLocation() {
 
 // Poll every 3 seconds
 setInterval(fetchLocation, 3000);
-
-
-
