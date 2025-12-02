@@ -30,8 +30,8 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* --- Line toggle buttons --- */
 .line-toggle{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:1200;display:flex;gap:8px}
-.toggle-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--white);color:var(--ateneo-blue);min-width:92px;padding:8px 12px;border-radius:20px;border:2px solid rgba(0,0,0,0.08);cursor:pointer;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.12);}
-.toggle-btn.active{outline:3px solid var(--ateneo-blue);box-shadow:0 4px 8px rgba(0,51,160,0.12);border-color:var(--ateneo-blue)}
+.toggle-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--white);color:var(--ateneo-blue);min-width:140px;padding:12px 18px;border-radius:24px;border:2px solid rgba(0,0,0,0.08);cursor:pointer;font-weight:700;font-size:15px;box-shadow:0 3px 8px rgba(0,0,0,0.14);}
+.toggle-btn.active{outline:4px solid var(--ateneo-blue);box-shadow:0 6px 14px rgba(0,51,160,0.16);border-color:var(--ateneo-blue)}
 .toggle-btn:focus{outline:none}
 
 /* Station markers */
@@ -54,7 +54,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .pullout-close{position:absolute;top:8px;left:8px;border:0;background:transparent;font-size:14px;padding:6px;cursor:pointer;color:#444}
 
 /* The small vertical tab visible on the right edge */
-.pullout-tab{position:absolute;right:-48px;transform-origin:center;background:var(--ateneo-blue);color:var(--white);padding:6px;border-radius:6px 6px 0 0;width:48px;text-align:center;font-weight:700;border:2px solid rgba(0,0,0,0.06);box-shadow:0 2px 6px rgba(0,0,0,0.12);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.pullout-tab{position:absolute;right:-72px;transform-origin:center;background:var(--ateneo-blue);color:var(--white);padding:10px;border-radius:8px 8px 0 0;width:72px;text-align:center;font-weight:800;border:2px solid rgba(0,0,0,0.06);box-shadow:0 4px 14px rgba(0,0,0,0.18);pointer-events:auto;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
 .pullout-tab:focus{outline:3px solid rgba(0,51,160,0.22)}
 .pullout-tab[aria-expanded="true"]{background:#022c66}
 
@@ -66,10 +66,10 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Make sure the panels look good on smaller screens: use narrower width */
 @media (max-width:520px){
-	.pullout-panel{width:220px}
-	.pullout-tab{right:-42px;width:44px;padding:6px}
+  .pullout-panel{width:220px}
+  .pullout-tab{right:-46px;width:56px;padding:8px}
 	/* slightly smaller left offset for vertical tab labels on small screens */
-	.pullout-tab .tab-label{left:-22px;font-size:12px}
+	.pullout-tab .tab-label{left:-24px;font-size:13px}
 }
 
 /* Hide the screen-reader-only text visually but keep available to assistive tech */
@@ -77,8 +77,8 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Make tab text more readable in vertical mode and ensure strong contrast */
 .pullout-tab .tab-main{display:block;color:var(--white);font-size:12px;line-height:1;text-transform:none;padding:0}
-.pullout-tab .tab-label{display:block;color:var(--white);font-size:13px;font-weight:700;margin:0;padding:0;line-height:1;position:absolute;left:-30px;top:50%;transform:translateY(-50%) rotate(-90deg);white-space:nowrap}
-.pullout-tab .tab-badge{display:block;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-weight:800;margin:3px 0;color:var(--white);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06)}
+.pullout-tab .tab-label{display:block;color:var(--ateneo-blue);font-size:16px;font-weight:800;margin:0;padding:0;line-height:1;position:absolute;left:-44px;top:50%;transform:translateY(-50%) rotate(-90deg);white-space:nowrap}
+.pullout-tab .tab-badge{display:block;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;font-weight:800;margin:3px 0;color:var(--white);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06)}
 .pullout-tab .line-a-badge{background:var(--ateneo-blue);border-color:rgba(255,255,255,0.08)}
 .pullout-tab .line-b-badge{background:#0265d3;border-color:rgba(255,255,255,0.08)}
 .pullout-tab .tab-main::after{content:'';display:block;height:2px;margin-top:4px;width:100%;opacity:.05}
