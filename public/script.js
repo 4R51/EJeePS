@@ -104,6 +104,10 @@ window.addEventListener("resize", () => {
   map.invalidateSize();
   try { updateMinZoomForAspect(); } catch (e) {}
 });
+// ensure icons update when aspect ratio changes (labels may be hidden/shown)
+window.addEventListener('resize', () => {
+  try { refreshStationIcons(); refreshMarkersVisibility(); } catch (e) {}
+});
 
 /* -------------------- Station toggles & markers -------------------- */
 
@@ -133,7 +137,7 @@ const stations = {
 let markersMap = new Map(); // stationName => { marker, station }
 
 // Create a custom div icon for a station
-function createStationIcon(name, lines, zoom) {
+function createStationIcon(name, lines, zoom, showLabel = true) {
   // Determine base size depending on zoom
   const baseSize = Math.max(18, Math.min(48, 10 + (zoom - 10) * 2));
   const fontSize = Math.max(10, Math.min(18, Math.round(baseSize / 2.5)));
@@ -149,9 +153,11 @@ function createStationIcon(name, lines, zoom) {
   }
   const letter = hasA && hasB ? "A/B" : (hasA ? "A" : "B");
 
+  const labelHtml = showLabel ? `<div class="station-label" style="font-size:${Math.max(16,Math.round(fontSize * 2))}px;font-weight:800;">${name}</div>` : '';
+
   const html = `
     <div class="station-icon ${hasA && hasB ? 'both' : (hasB ? 'line-b' : 'line-a')}">
-      <div class="station-label" style="font-size:${Math.max(16,Math.round(fontSize * 2))}px;font-weight:800;">${name}</div>
+      ${labelHtml}
       <div class="station-circle" style="width:${baseSize}px;height:${baseSize}px;font-size:${fontSize}px;line-height:${baseSize}px;background:${background};">${letter}</div>
     </div>
   `;
@@ -185,11 +191,22 @@ function buildUnifiedStations() {
 
 const unifiedStations = buildUnifiedStations();
 
+// Determine whether to show station labels depending on aspect ratio and zoom level.
+// Hide labels when fully zoomed out on horizontal aspect ratios (to avoid overlap).
+function shouldShowStationLabels(zoom) {
+  // If zoom is undefined, read from map
+  const z = typeof zoom === 'number' ? zoom : (map && map.getZoom ? map.getZoom() : 16);
+  const isHorizontal = window.innerWidth >= window.innerHeight;
+  // If horizontal and at or below zoom 16, hide labels; otherwise show
+  return !(isHorizontal && z <= 16);
+}
+
 // Create markers for unified stations
 function createUnifiedMarkers() {
   for (const [name, s] of unifiedStations.entries()) {
     const lines = Array.from(s.lines);
-    const m = L.marker([s.lat, s.lng], { icon: createStationIcon(s.name, lines, map.getZoom()) });
+    const showLabel = shouldShowStationLabels(map.getZoom());
+    const m = L.marker([s.lat, s.lng], { icon: createStationIcon(s.name, lines, map.getZoom(), showLabel) });
     m.station = s; // {name, lat, lng, lines:Set}
     markersMap.set(name, m);
   }
@@ -205,7 +222,8 @@ function refreshMarkersVisibility() {
     if (visible) {
       // set appropriate icon: depends on which lines active relative to station lines
       const linesForIcon = Array.from(stationLines).filter(l => active.has(l));
-      m.setIcon(createStationIcon(m.station.name, linesForIcon, map.getZoom()));
+      const show = shouldShowStationLabels(map.getZoom());
+      m.setIcon(createStationIcon(m.station.name, linesForIcon, map.getZoom(), show));
       m.addTo(map);
     } else {
       map.removeLayer(m);
@@ -319,7 +337,8 @@ function refreshStationIcons() {
   const active = getActiveLines();
   for (const m of markersMap.values()) {
     const linesForIcon = Array.from(m.station.lines).filter(l => active.has(l));
-    m.setIcon(createStationIcon(m.station.name, linesForIcon.length ? linesForIcon : Array.from(m.station.lines), z));
+    const show = shouldShowStationLabels(z);
+    m.setIcon(createStationIcon(m.station.name, linesForIcon.length ? linesForIcon : Array.from(m.station.lines), z, show));
   }
 }
 
