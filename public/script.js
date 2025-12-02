@@ -54,3 +54,12 @@ async function fetchLocation() {
 
 // Poll every 3 seconds
 setInterval(fetchLocation, 3000);
+
+// Ensure the map recalculates size after the banner is rendered and on window resize
+window.addEventListener("load", () => {
+  // Small timeout to wait for CSS/DOM layout to settle
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 50);
+});
+window.addEventListener("resize", () => map.invalidateSize());
