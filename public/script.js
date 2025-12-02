@@ -350,7 +350,7 @@ function initPullouts() {
     } catch (err) { /* ignore */ }
   });
 
-  // reposition logic: ensure buttons don't overlap with open panels
+  // reposition logic: ensure buttons don't overlap with open panels, and panels move with buttons
   const pulloutsContainer = document.querySelector('.pullouts');
   const baseTopA = 12;
   const baseTopB = 84;
@@ -373,10 +373,15 @@ function initPullouts() {
       
       // Calculate positions needed to avoid overlap with any open panels
       if (panelAOpen) {
-        const panelARectBottom = panelA.getBoundingClientRect().bottom - containerRect.top;
         // Keep Button A at base, move Button B below Panel A if needed
         toggleA.style.top = baseTopA + 'px';
-        const desiredTopForB = Math.ceil(panelARectBottom + toggleGap);
+        
+        // Position Panel A dropdown below Button A
+        const toggleARect = toggleA.getBoundingClientRect();
+        const panelATopPos = Math.round(toggleARect.top - containerRect.top + toggleARect.height + 8);
+        panelA.style.top = panelATopPos + 'px';
+        
+        const desiredTopForB = Math.ceil(toggleARect.bottom - containerRect.top + toggleGap);
         const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
         toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
       } else {
@@ -385,11 +390,11 @@ function initPullouts() {
         toggleA.style.top = baseTopA + 'px';
       }
       
-      // If Panel B is also open, we need to handle Button A positioning
-      if (panelBOpen && panelAOpen) {
-        // Both are open - they should be positioned side by side or stacked
-        // Panel B should position below Panel A, so Button A stays at base
-        toggleA.style.top = baseTopA + 'px';
+      // If Panel B is also open, position it below Button B
+      if (panelBOpen) {
+        const toggleBRect = toggleB.getBoundingClientRect();
+        const panelBTopPos = Math.round(toggleBRect.top - containerRect.top + toggleBRect.height + 8);
+        panelB.style.top = panelBTopPos + 'px';
       }
     } catch (err) {
       // ignore errors
