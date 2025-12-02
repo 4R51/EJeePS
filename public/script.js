@@ -66,25 +66,25 @@ window.addEventListener("resize", () => map.invalidateSize());
 
 /* -------------------- Station toggles & markers -------------------- */
 
-// Approximate coordinates for station locations offset from center (replace with accurate coords as needed)
+// Replace stations coordinates with updated values for Line A and Line B
 const stations = {
   a: [
-    { name: "Xavier Hall", lat: 14.6400, lng: 121.0790 },
-    { name: "Cervini Hall", lat: 14.6398, lng: 121.0791 },
-    { name: "Old Comm Building", lat: 14.6396, lng: 121.0788 },
-    { name: "LHS", lat: 14.6392, lng: 121.0787 },
-    { name: "Ateneo Gate 1", lat: 14.6387, lng: 121.0785 },
-    { name: "JSEC", lat: 14.6391, lng: 121.0795 },
-    { name: "Old Rizal Library", lat: 14.6395, lng: 121.0796 },
+    { name: "Xavier Hall", lat: 14.639966745962026, lng: 121.07850968556089 },
+    { name: "Cervini Hall", lat: 14.639253157631932, lng: 121.0800841625044 },
+    { name: "Old Comm Building", lat: 14.63652791238076, lng: 121.07827403693402 },
+    { name: "LHS", lat: 14.636100216667035, lng: 121.08068282521631 },
+    { name: "Gate 1", lat: 14.634675319061712, lng: 121.07504641949906 },
+    { name: "JSEC", lat: 14.637743581877059, lng: 121.07632455062317 },
+    { name: "Old Rizal Library", lat: 14.64052467759681, lng: 121.07721578701218 },
   ],
   b: [
-    { name: "Xavier Hall", lat: 14.6400, lng: 121.0790 },
-    { name: "Cervini Hall", lat: 14.6398, lng: 121.0791 },
-    { name: "Ateneo JHS", lat: 14.6390, lng: 121.0790 },
-    { name: "FLC", lat: 14.6401, lng: 121.0786 },
-    { name: "Bellarmine Hall", lat: 14.6396, lng: 121.0785 },
-    { name: "SDC", lat: 14.6389, lng: 121.0788 },
-    { name: "Arete", lat: 14.6391, lng: 121.0792 },
+    { name: "Xavier Hall", lat: 14.639966745962026, lng: 121.07850968556089 },
+    { name: "Cervini Hall", lat: 14.639253157631932, lng: 121.0800841625044 },
+    { name: "Ateneo JHS", lat: 14.644194881700924, lng: 121.0806035026449 },
+    { name: "FLC", lat: 14.646212556900775, lng: 121.080723735956 },
+    { name: "Bellarmine Hall", lat: 14.641526999841634, lng: 121.07937597806259 },
+    { name: "SDC", lat: 14.641641188321234, lng: 121.07801140341061 },
+    { name: "Arete", lat: 14.64082769226398, lng: 121.07562288338853 },
   ],
 };
 
