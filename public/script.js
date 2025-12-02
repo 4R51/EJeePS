@@ -358,37 +358,43 @@ function initPullouts() {
   const pulloutsContainer = document.querySelector('.pullouts');
   const baseTopA = 12;
   const baseTopB = 84;
+  const toggleHeight = 48; // approximate height of toggle buttons
+  const toggleGap = 12; // cushion between button and panel
 
   function repositionToggleButtons() {
     try {
       const containerRect = pulloutsContainer.getBoundingClientRect();
-      // compute A panel bottom relative to container
-      let aBottom = 0;
-      let bBottom = 0;
-      if (panelA.classList.contains('open')) {
-        aBottom = panelA.getBoundingClientRect().bottom - containerRect.top;
-      }
-      if (panelB.classList.contains('open')) {
-        bBottom = panelB.getBoundingClientRect().bottom - containerRect.top;
-      }
-
-      // If A is open and it would overlap toggleB's default position, move toggleB below it
-      if (aBottom > 0) {
-        // cushion 12px
-        const desiredTopForB = Math.ceil(aBottom + 12);
-        const maxTop = Math.max(containerRect.height - 40, baseTopB); // avoid pushing out of container
-        toggleB.style.top = Math.min(desiredTopForB, maxTop) + 'px';
-      } else {
-        toggleB.style.top = baseTopB + 'px';
-      }
-
-      // If B is open and it would overlap toggleA's default position, move toggleA below it
-      if (bBottom > 0) {
-        const desiredTopForA = Math.ceil(bBottom + 12);
-        const maxTopA = Math.max(containerRect.height - 40, baseTopA);
-        toggleA.style.top = Math.min(desiredTopForA, maxTopA) + 'px';
-      } else {
+      
+      // Only one panel can be open at a time (they close each other)
+      const openPanel = panelA.classList.contains('open') ? panelA : 
+                        panelB.classList.contains('open') ? panelB : null;
+      
+      if (!openPanel) {
+        // No panel open, reset to base positions
         toggleA.style.top = baseTopA + 'px';
+        toggleB.style.top = baseTopB + 'px';
+        return;
+      }
+      
+      // Measure the open panel's position relative to container
+      const openPanelRect = openPanel.getBoundingClientRect();
+      const panelBottomRelative = openPanelRect.bottom - containerRect.top;
+      
+      // Determine which panel is open and reposition the OTHER button below it
+      if (panelA.classList.contains('open')) {
+        // A is open, move B below A's panel
+        const desiredTopForB = Math.ceil(panelBottomRelative + toggleGap);
+        const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
+        toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
+        // A stays at base position since no other panel is open
+        toggleA.style.top = baseTopA + 'px';
+      } else if (panelB.classList.contains('open')) {
+        // B is open, move A below B's panel
+        const desiredTopForA = Math.ceil(panelBottomRelative + toggleGap);
+        const maxTopA = Math.max(containerRect.height - toggleHeight, baseTopA);
+        toggleA.style.top = Math.min(desiredTopForA, maxTopA) + 'px';
+        // B stays at base position since no other panel is open
+        toggleB.style.top = baseTopB + 'px';
       }
     } catch (err) {
       // ignore errors
