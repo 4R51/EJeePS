@@ -31,7 +31,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 /* --- Line toggle buttons --- */
 .line-toggle{position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:1200;display:flex;gap:8px}
 .toggle-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--white);color:var(--ateneo-blue);min-width:92px;padding:8px 12px;border-radius:20px;border:2px solid rgba(0,0,0,0.08);cursor:pointer;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.12);}
-.toggle-btn.active{outline:3px solid rgba(0,51,160,0.14);box-shadow:0 4px 8px rgba(0,51,160,0.12)}
+.toggle-btn.active{outline:3px solid var(--ateneo-blue);box-shadow:0 4px 8px rgba(0,51,160,0.12);border-color:var(--ateneo-blue)}
 .toggle-btn:focus{outline:none}
 
 /* Station markers */

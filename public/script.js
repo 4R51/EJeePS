@@ -88,22 +88,30 @@ const stations = {
   ],
 };
 
-// Containers for created markers
-let markersA = [];
-let markersB = [];
+// Containers for created markers (single marker per station)
+let markersMap = new Map(); // stationName => { marker, station }
 
 // Create a custom div icon for a station
-function createStationIcon(name, letter, line, zoom) {
+function createStationIcon(name, lines, zoom) {
   // Determine base size depending on zoom
   const baseSize = Math.max(18, Math.min(48, 10 + (zoom - 10) * 2));
   const fontSize = Math.max(10, Math.min(18, Math.round(baseSize / 2.5)));
-
-  const circleColor = line === "a" ? "var(--ateneo-blue)" : "#0265d3";
+  // lines: array of 'a','b' (one or both)
+  const hasA = lines.includes("a");
+  const hasB = lines.includes("b");
+  // Determine background: single color for A/B or split gradient for both
+  let background = "var(--ateneo-blue)";
+  if (hasA && hasB) {
+    background = "linear-gradient(90deg, var(--ateneo-blue) 50%, #0265d3 50%)";
+  } else if (hasB) {
+    background = "#0265d3";
+  }
+  const letter = hasA && hasB ? "A/B" : (hasA ? "A" : "B");
 
   const html = `
-    <div class="station-icon ${line}">
+    <div class="station-icon ${hasA && hasB ? 'both' : (hasB ? 'line-b' : 'line-a')}">
       <div class="station-label" style="font-size:${Math.max(10,Math.round(fontSize*0.85))}px">${name}</div>
-      <div class="station-circle" style="width:${baseSize}px;height:${baseSize}px;font-size:${fontSize}px;line-height:${baseSize}px;background:${circleColor};">${letter}</div>
+      <div class="station-circle" style="width:${baseSize}px;height:${baseSize}px;font-size:${fontSize}px;line-height:${baseSize}px;background:${background};">${letter}</div>
     </div>
   `;
 
@@ -116,37 +124,71 @@ function createStationIcon(name, letter, line, zoom) {
 }
 
 // Instantiate station markers for a line
-function createMarkersForLine(line) {
-  const arr = line === "a" ? stations.a : stations.b;
-  const markerArr = [];
-  for (const s of arr) {
-    const letter = line.toUpperCase();
-    const m = L.marker([s.lat, s.lng], { icon: createStationIcon(s.name, letter, line, map.getZoom()) });
-    m.station = s;
-    m.line = line;
-    markerArr.push(m);
+// Build a unified station map keyed by station name, merging lines
+function buildUnifiedStations() {
+  const unified = new Map();
+  function addToUnified(stationList, line) {
+    for (const s of stationList) {
+      const key = s.name;
+      if (!unified.has(key)) {
+        unified.set(key, { name: s.name, lat: s.lat, lng: s.lng, lines: new Set([line]) });
+      } else {
+        unified.get(key).lines.add(line);
+      }
+    }
   }
-  return markerArr;
+  addToUnified(stations.a, "a");
+  addToUnified(stations.b, "b");
+  return unified;
 }
 
-// Add initial markers (both toggle default ON)
-markersA = createMarkersForLine("a");
-markersB = createMarkersForLine("b");
-markersA.forEach(m => m.addTo(map));
-markersB.forEach(m => m.addTo(map));
+const unifiedStations = buildUnifiedStations();
+
+// Create markers for unified stations
+function createUnifiedMarkers() {
+  for (const [name, s] of unifiedStations.entries()) {
+    const lines = Array.from(s.lines);
+    const m = L.marker([s.lat, s.lng], { icon: createStationIcon(s.name, lines, map.getZoom()) });
+    m.station = s; // {name, lat, lng, lines:Set}
+    markersMap.set(name, m);
+  }
+}
+
+// Add markers to map depending on active toggles
+function refreshMarkersVisibility() {
+  const active = getActiveLines();
+  for (const [name, m] of markersMap.entries()) {
+    const stationLines = m.station.lines; // Set
+    // Intersection
+    const visible = Array.from(stationLines).some(l => active.has(l));
+    if (visible) {
+      // set appropriate icon: depends on which lines active relative to station lines
+      const linesForIcon = Array.from(stationLines).filter(l => active.has(l));
+      m.setIcon(createStationIcon(m.station.name, linesForIcon, map.getZoom()));
+      m.addTo(map);
+    } else {
+      map.removeLayer(m);
+    }
+  }
+}
+
+// Build markers and initially display them both (default toggles ON)
+createUnifiedMarkers();
+refreshMarkersVisibility();
 
 // Toggle handling
 function setLineVisibility(line, visible) {
-  const list = line === "a" ? markersA : markersB;
-  if (visible) list.forEach(m => m.addTo(map));
-  else list.forEach(m => map.removeLayer(m));
+  // simply refresh visibility based on current toggles
+  refreshMarkersVisibility();
 }
 
 // Update icon sizes on zoom
 function refreshStationIcons() {
   const z = map.getZoom();
-  for (const m of [...markersA, ...markersB]) {
-    m.setIcon(createStationIcon(m.station.name, m.line.toUpperCase(), m.line, z));
+  const active = getActiveLines();
+  for (const m of markersMap.values()) {
+    const linesForIcon = Array.from(m.station.lines).filter(l => active.has(l));
+    m.setIcon(createStationIcon(m.station.name, linesForIcon.length ? linesForIcon : Array.from(m.station.lines), z));
   }
 }
 
@@ -166,5 +208,18 @@ btnB.addEventListener("click", () => {
   setLineVisibility("b", isActive);
 });
 
-// Ensure icons scale properly initially
+// Helper to get currently active lines from button states
+function getActiveLines() {
+  const aEl = document.getElementById("btn-line-a");
+  const bEl = document.getElementById("btn-line-b");
+  const aActive = aEl ? aEl.classList.contains("active") : false;
+  const bActive = bEl ? bEl.classList.contains("active") : false;
+  const set = new Set();
+  if (aActive) set.add("a");
+  if (bActive) set.add("b");
+  return set;
+}
+
+// Ensure icons scale properly initially and after a small delay
 refreshStationIcons();
+refreshMarkersVisibility();
