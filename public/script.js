@@ -151,7 +151,7 @@ function createStationIcon(name, lines, zoom) {
 
   const html = `
     <div class="station-icon ${hasA && hasB ? 'both' : (hasB ? 'line-b' : 'line-a')}">
-      <div class="station-label" style="font-size:${Math.max(10,Math.round(fontSize*0.85))}px">${name}</div>
+      <div class="station-label" style="font-size:${Math.max(12,Math.round(fontSize * 1.25))}px">${name}</div>
       <div class="station-circle" style="width:${baseSize}px;height:${baseSize}px;font-size:${fontSize}px;line-height:${baseSize}px;background:${background};">${letter}</div>
     </div>
   `;
