@@ -47,12 +47,12 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .pullouts{position:fixed;right:12px;top:var(--header-height);bottom:18px;z-index:1400;pointer-events:auto}
 
 /* Wrapper containers for button + panel pairs */
-.pullout-toggle-wrapper{position:absolute;right:8px;z-index:1420;pointer-events:auto}
+.pullout-toggle-wrapper{position:absolute;right:0;z-index:1420;pointer-events:auto}
 #wrapper-stops-a{top:12px}
 #wrapper-stops-b{top:84px}
 
 /* Dropdown panels for stop lists */
-.pullout-panel{position:absolute;right:92px;top:0;width:320px;max-height:72vh;background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px;padding:12px;display:none;flex-direction:column;pointer-events:auto;z-index:1410;overflow:auto;transition:opacity 0.2s ease, transform 0.2s ease;opacity:0;visibility:hidden;transform:translateY(-6px)}
+.pullout-panel{position:absolute;right:0;top:100%;width:320px;max-height:72vh;background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px;padding:12px;display:none;flex-direction:column;pointer-events:auto;overflow:auto;transition:opacity 0.2s ease, transform 0.2s ease;opacity:0;visibility:hidden;transform:translateY(-6px);margin-top:8px;z-index:1410}
 .pullout-panel.open{display:flex;opacity:1;visibility:visible;transform:translateY(0)}
 
 .pullout-close{position:absolute;top:8px;right:8px;border:0;background:transparent;font-size:14px;padding:6px;cursor:pointer;color:#666;font-weight:600}
@@ -68,7 +68,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .stop-btn:active{background:rgba(3,15,35,0.12)}
 
 /* Stop list toggle buttons */
-.pullout-toggle-btn{position:absolute;right:8px;padding:12px 14px;border-radius:8px;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+.pullout-toggle-btn{position:relative;padding:12px 14px;border-radius:8px;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(0,0,0,0.12);white-space:nowrap}
 
 /* Line A button - Ateneo Blue #0033a0 */
 #btn-stops-a{background:var(--ateneo-blue);color:var(--white)}

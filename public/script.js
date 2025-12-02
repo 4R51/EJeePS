@@ -285,6 +285,7 @@ function initPullouts() {
       panelA.classList.add('open');
       toggleA.setAttribute('aria-expanded', 'true');
     }
+    repositionWrappers();
   });
 
   toggleB.addEventListener('click', () => {
@@ -296,16 +297,19 @@ function initPullouts() {
       panelB.classList.add('open');
       toggleB.setAttribute('aria-expanded', 'true');
     }
+    repositionWrappers();
   });
 
   // Close buttons
   panelA.querySelector('.pullout-close').addEventListener('click', () => {
     panelA.classList.remove('open');
     toggleA.setAttribute('aria-expanded', 'false');
+    repositionWrappers();
   });
   panelB.querySelector('.pullout-close').addEventListener('click', () => {
     panelB.classList.remove('open');
     toggleB.setAttribute('aria-expanded', 'false');
+    repositionWrappers();
   });
 
   // Close dropdowns when clicking outside of wrappers
@@ -318,6 +322,42 @@ function initPullouts() {
         toggleB.setAttribute('aria-expanded', 'false');
       }
     } catch (err) { /* ignore */ }
+  });
+
+  // Reposition wrappers so Button B moves below Panel A if needed
+  const baseTopA = 12;
+  const baseTopB = 84;
+  const toggleHeight = 48;
+  const toggleGap = 12;
+
+  function repositionWrappers() {
+    try {
+      const pullouts = document.querySelector('.pullouts');
+      const pulloutRect = pullouts.getBoundingClientRect();
+
+      // Reset to base positions
+      wrapperA.style.top = baseTopA + 'px';
+      wrapperB.style.top = baseTopB + 'px';
+
+      // If Panel A is open, measure its height and move Wrapper B below it
+      if (panelA.classList.contains('open')) {
+        const panelARect = panelA.getBoundingClientRect();
+        const panelABottom = panelARect.bottom - pulloutRect.top;
+        
+        // Move Wrapper B below Panel A if there's overlap
+        if (panelABottom > baseTopB) {
+          const desiredTop = Math.ceil(panelABottom + toggleGap);
+          wrapperB.style.top = desiredTop + 'px';
+        }
+      }
+    } catch (err) {
+      // ignore errors
+    }
+  }
+
+  // Initial positioning
+  repositionWrappers();
+  window.addEventListener('resize', repositionWrappers);
   });
 }
 
