@@ -17,10 +17,10 @@ const map = L.map("map", {
   center: [14.6394, 121.0789],
   zoom: 16,
   minZoom: initialMinZoom,
-  // Slightly padded bounds derived from station coords (SW, NE)
+  // Expanded bounds to allow panning around campus (NW, SE corners with padding)
   maxBounds: L.latLngBounds([
-    [14.633675319061712, 121.07404641949906],
-    [14.647212556900775, 121.081723735956],
+    [14.630, 121.070],
+    [14.650, 121.084],
   ]),
   maxBoundsViscosity: 1.0, // make panning constrained to the bounds
   zoomControl: true
@@ -282,8 +282,27 @@ function initPullouts() {
     try { toggleA.setAttribute('aria-expanded', 'false'); } catch (e) {}
     try { toggleB.setAttribute('aria-expanded', 'false'); } catch (e) {}
 
+    // show panel and position it next to the toggle as a dropdown
     panel.classList.add('open');
     toggleBtn.setAttribute('aria-expanded', 'true');
+
+    try {
+      const containerRect = pulloutsContainer.getBoundingClientRect();
+      const tRect = toggleBtn.getBoundingClientRect();
+      // ensure we can measure panel height
+      const panelHeight = panel.offsetHeight || panel.getBoundingClientRect().height || 220;
+      // Prefer showing below the toggle
+      let topPos = Math.round(tRect.top - containerRect.top + tRect.height + 8);
+      // If it would overflow, show above the toggle (if there's space)
+      if (topPos + panelHeight > containerRect.height) {
+        const altTop = Math.round(tRect.top - containerRect.top - panelHeight - 8);
+        topPos = Math.max(8, altTop);
+      }
+      panel.style.top = topPos + 'px';
+    } catch (e) {
+      // ignore measurement errors
+    }
+
     repositionToggleButtons();
   }
 
@@ -320,6 +339,19 @@ function initPullouts() {
     panelB.classList.remove('open');
     toggleB.setAttribute('aria-expanded', 'false');
     repositionToggleButtons();
+  });
+
+  // Close dropdowns when clicking outside of toggles/panels
+  document.addEventListener('click', (e) => {
+    try {
+      if (!panelA.contains(e.target) && !toggleA.contains(e.target) && !panelB.contains(e.target) && !toggleB.contains(e.target)) {
+        panelA.classList.remove('open');
+        panelB.classList.remove('open');
+        toggleA.setAttribute('aria-expanded', 'false');
+        toggleB.setAttribute('aria-expanded', 'false');
+        repositionToggleButtons();
+      }
+    } catch (err) { /* ignore */ }
   });
 
   // reposition logic: make sure the other toggle button doesn't get covered by open panel(s)
