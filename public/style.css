@@ -54,7 +54,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .pullout-close{position:absolute;top:8px;left:8px;border:0;background:transparent;font-size:14px;padding:6px;cursor:pointer;color:#444}
 
 /* The small vertical tab visible on the right edge */
-.pullout-tab{position:absolute;right:-98px;transform-origin:center;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);background:var(--ateneo-blue);color:var(--white);padding:10px 6px;border-radius:6px 6px 0 0;width:120px;text-align:center;font-weight:700;border:2px solid rgba(0,0,0,0.06);box-shadow:0 2px 6px rgba(0,0,0,0.12);pointer-events:auto;cursor:pointer}
+.pullout-tab{position:absolute;right:-66px;transform-origin:center;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);background:var(--ateneo-blue);color:var(--white);padding:8px 6px;border-radius:6px 6px 0 0;width:88px;text-align:center;font-weight:700;border:2px solid rgba(0,0,0,0.06);box-shadow:0 2px 6px rgba(0,0,0,0.12);pointer-events:auto;cursor:pointer}
 .pullout-tab:focus{outline:3px solid rgba(0,51,160,0.22)}
 .pullout-tab[aria-expanded="true"]{background:#022c66}
 
@@ -66,8 +66,11 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Make sure the panels look good on smaller screens: use narrower width */
 @media (max-width:520px){
-	.pullout-panel{width:260px}
-	.pullout-tab{right:-78px;width:100px}
+	.pullout-panel{width:240px}
+	.pullout-tab{right:-60px;width:86px;padding:8px 4px}
 }
+
+/* Hide the screen-reader-only text visually but keep available to assistive tech */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 
