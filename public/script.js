@@ -185,6 +185,96 @@ function refreshMarkersVisibility() {
 createUnifiedMarkers();
 refreshMarkersVisibility();
 
+/* -------------------- Right-side pull-out stop lists -------------------- */
+
+// Build the static stop lists for Line A and Line B into the pull-out panels
+function initPullouts() {
+  const tabA = document.getElementById('tab-line-a');
+  const tabB = document.getElementById('tab-line-b');
+  const panelA = document.getElementById('sidebar-line-a');
+  const panelB = document.getElementById('sidebar-line-b');
+  const listA = document.getElementById('list-line-a');
+  const listB = document.getElementById('list-line-b');
+
+  function renderList(ul, stops) {
+    ul.innerHTML = '';
+    for (const s of stops) {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'stop-btn';
+      btn.textContent = s.name;
+      btn.dataset.lat = s.lat;
+      btn.dataset.lng = s.lng;
+      btn.addEventListener('click', () => {
+        // Center on the stop and zoom in a touch
+        map.setView([s.lat, s.lng], Math.max(17, map.getZoom()), { animate: true });
+        // Close panel after selection
+        panelA.classList.remove('open');
+        panelB.classList.remove('open');
+        tabA.setAttribute('aria-expanded', 'false');
+        tabB.setAttribute('aria-expanded', 'false');
+      });
+      li.appendChild(btn);
+      ul.appendChild(li);
+    }
+  }
+
+  renderList(listA, stations.a);
+  renderList(listB, stations.b);
+
+  // Toggle behavior: when a tab is clicked, open that panel and close the other
+  function openPanel(panel, tab) {
+    // close both then open requested
+    panelA.classList.remove('open');
+    panelB.classList.remove('open');
+    tabA.setAttribute('aria-expanded', 'false');
+    tabB.setAttribute('aria-expanded', 'false');
+
+    panel.classList.add('open');
+    tab.setAttribute('aria-expanded', 'true');
+  }
+
+  tabA.addEventListener('click', () => {
+    const isOpen = panelA.classList.contains('open');
+    if (isOpen) {
+      panelA.classList.remove('open');
+      tabA.setAttribute('aria-expanded', 'false');
+    } else {
+      openPanel(panelA, tabA);
+    }
+  });
+
+  tabB.addEventListener('click', () => {
+    const isOpen = panelB.classList.contains('open');
+    if (isOpen) {
+      panelB.classList.remove('open');
+      tabB.setAttribute('aria-expanded', 'false');
+    } else {
+      openPanel(panelB, tabB);
+    }
+  });
+
+  // Close buttons
+  panelA.querySelector('.pullout-close').addEventListener('click', () => {
+    panelA.classList.remove('open');
+    tabA.setAttribute('aria-expanded', 'false');
+  });
+  panelB.querySelector('.pullout-close').addEventListener('click', () => {
+    panelB.classList.remove('open');
+    tabB.setAttribute('aria-expanded', 'false');
+  });
+}
+
+// initialize pullouts after DOM is ready
+window.addEventListener('load', () => {
+  try {
+    initPullouts();
+  } catch (err) {
+    console.warn('Pullouts init failed', err);
+  }
+});
+
 // Toggle handling
 function setLineVisibility(line, visible) {
   // simply refresh visibility based on current toggles

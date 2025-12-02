@@ -20,6 +20,29 @@
     <button id="btn-line-b" class="toggle-btn active" data-line="b" aria-pressed="true">Line B</button>
   </div>
 
+  <!-- Right-side pull-out tabs: Line A & Line B stops (static lists) -->
+  <div class="pullouts" aria-hidden="false">
+    <div id="sidebar-line-a" class="pullout-panel" aria-labelledby="tab-line-a" role="region" aria-label="Line A stops">
+      <button class="pullout-close" aria-label="Close Line A stops">✕</button>
+      <header class="pullout-header">Line A Stops</header>
+      <div class="pullout-body">
+        <ul id="list-line-a" class="stop-list"></ul>
+      </div>
+    </div>
+
+    <button id="tab-line-a" class="pullout-tab" aria-controls="sidebar-line-a" aria-expanded="false">Line A Stops</button>
+
+    <div id="sidebar-line-b" class="pullout-panel" aria-labelledby="tab-line-b" role="region" aria-label="Line B stops">
+      <button class="pullout-close" aria-label="Close Line B stops">✕</button>
+      <header class="pullout-header">Line B Stops</header>
+      <div class="pullout-body">
+        <ul id="list-line-b" class="stop-list"></ul>
+      </div>
+    </div>
+
+    <button id="tab-line-b" class="pullout-tab" aria-controls="sidebar-line-b" aria-expanded="false">Line B Stops</button>
+  </div>
+
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>
