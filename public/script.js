@@ -274,19 +274,14 @@ function initPullouts() {
   renderList(listA, stations.a);
   renderList(listB, stations.b);
 
-  // Toggle behavior: when a tab is clicked, open that panel and close the other
+  // Toggle behavior: panels can be open simultaneously
   function openPanel(panel, toggleBtn) {
-    // close both then open requested
-    panelA.classList.remove('open');
-    panelB.classList.remove('open');
-    try { toggleA.setAttribute('aria-expanded', 'false'); } catch (e) {}
-    try { toggleB.setAttribute('aria-expanded', 'false'); } catch (e) {}
-
     // show panel and position it next to the toggle as a dropdown
     panel.classList.add('open');
     toggleBtn.setAttribute('aria-expanded', 'true');
 
     try {
+      const pulloutsContainer = document.querySelector('.pullouts');
       const containerRect = pulloutsContainer.getBoundingClientRect();
       const tRect = toggleBtn.getBoundingClientRect();
       // ensure we can measure panel height
@@ -344,6 +339,7 @@ function initPullouts() {
   // Close dropdowns when clicking outside of toggles/panels
   document.addEventListener('click', (e) => {
     try {
+      // Only close if clicking completely outside both panels AND both toggles
       if (!panelA.contains(e.target) && !toggleA.contains(e.target) && !panelB.contains(e.target) && !toggleB.contains(e.target)) {
         panelA.classList.remove('open');
         panelB.classList.remove('open');
@@ -354,7 +350,7 @@ function initPullouts() {
     } catch (err) { /* ignore */ }
   });
 
-  // reposition logic: make sure the other toggle button doesn't get covered by open panel(s)
+  // reposition logic: ensure buttons don't overlap with open panels
   const pulloutsContainer = document.querySelector('.pullouts');
   const baseTopA = 12;
   const baseTopB = 84;
@@ -365,32 +361,35 @@ function initPullouts() {
     try {
       const containerRect = pulloutsContainer.getBoundingClientRect();
       
-      // Only one panel can be open at a time (they close each other)
-      const openPanel = panelA.classList.contains('open') ? panelA : 
-                        panelB.classList.contains('open') ? panelB : null;
+      const panelAOpen = panelA.classList.contains('open');
+      const panelBOpen = panelB.classList.contains('open');
       
-      if (!openPanel) {
-        // No panel open, reset to base positions
+      if (!panelAOpen && !panelBOpen) {
+        // No panels open, reset to base positions
         toggleA.style.top = baseTopA + 'px';
         toggleB.style.top = baseTopB + 'px';
         return;
       }
       
-      // Measure the open panel's position relative to container
-      const openPanelRect = openPanel.getBoundingClientRect();
-      const panelBottomRelative = openPanelRect.bottom - containerRect.top;
-      
-      // Determine which panel is open and reposition ONLY the OTHER button below it
-      if (panelA.classList.contains('open')) {
-        // A is open, move B below A's panel, keep A in place
-        const desiredTopForB = Math.ceil(panelBottomRelative + toggleGap);
+      // Calculate positions needed to avoid overlap with any open panels
+      if (panelAOpen) {
+        const panelARectBottom = panelA.getBoundingClientRect().bottom - containerRect.top;
+        // Keep Button A at base, move Button B below Panel A if needed
+        toggleA.style.top = baseTopA + 'px';
+        const desiredTopForB = Math.ceil(panelARectBottom + toggleGap);
         const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
         toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
-        toggleA.style.top = baseTopA + 'px';
-      } else if (panelB.classList.contains('open')) {
-        // B is open, keep A in place (don't move it), B stays at base
-        toggleA.style.top = baseTopA + 'px';
+      } else {
+        // Panel A is not open, Button B can go to base position
         toggleB.style.top = baseTopB + 'px';
+        toggleA.style.top = baseTopA + 'px';
+      }
+      
+      // If Panel B is also open, we need to handle Button A positioning
+      if (panelBOpen && panelAOpen) {
+        // Both are open - they should be positioned side by side or stacked
+        // Panel B should position below Panel A, so Button A stays at base
+        toggleA.style.top = baseTopA + 'px';
       }
     } catch (err) {
       // ignore errors
