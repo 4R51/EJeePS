@@ -380,20 +380,16 @@ function initPullouts() {
       const openPanelRect = openPanel.getBoundingClientRect();
       const panelBottomRelative = openPanelRect.bottom - containerRect.top;
       
-      // Determine which panel is open and reposition the OTHER button below it
+      // Determine which panel is open and reposition ONLY the OTHER button below it
       if (panelA.classList.contains('open')) {
-        // A is open, move B below A's panel
+        // A is open, move B below A's panel, keep A in place
         const desiredTopForB = Math.ceil(panelBottomRelative + toggleGap);
         const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
         toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
-        // A stays at base position since no other panel is open
         toggleA.style.top = baseTopA + 'px';
       } else if (panelB.classList.contains('open')) {
-        // B is open, move A below B's panel
-        const desiredTopForA = Math.ceil(panelBottomRelative + toggleGap);
-        const maxTopA = Math.max(containerRect.height - toggleHeight, baseTopA);
-        toggleA.style.top = Math.min(desiredTopForA, maxTopA) + 'px';
-        // B stays at base position since no other panel is open
+        // B is open, keep A in place (don't move it), B stays at base
+        toggleA.style.top = baseTopA + 'px';
         toggleB.style.top = baseTopB + 'px';
       }
     } catch (err) {
