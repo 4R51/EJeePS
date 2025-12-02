@@ -61,13 +61,15 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 /* Position the two tabs so they don't overlap; top one slightly higher */
 #tab-line-a{top:12px}
 #sidebar-line-a{top:0}
-#tab-line-b{top:140px}
-#sidebar-line-b{top:128px}
+#tab-line-b{top:84px}
+#sidebar-line-b{top:72px}
 
 /* Make sure the panels look good on smaller screens: use narrower width */
 @media (max-width:520px){
-  .pullout-panel{width:220px}
-  .pullout-tab{right:-42px;width:44px;padding:6px}
+	.pullout-panel{width:220px}
+	.pullout-tab{right:-42px;width:44px;padding:6px}
+	/* slightly smaller left offset for vertical tab labels on small screens */
+	.pullout-tab .tab-label{left:-22px;font-size:12px}
 }
 
 /* Hide the screen-reader-only text visually but keep available to assistive tech */
@@ -75,7 +77,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Make tab text more readable in vertical mode and ensure strong contrast */
 .pullout-tab .tab-main{display:block;color:var(--white);font-size:12px;line-height:1;text-transform:none;padding:0}
-.pullout-tab .tab-label{display:block;color:var(--white);font-size:11px;font-weight:700;margin:0;padding:0;line-height:1;position:absolute;left:-26px;top:50%;transform:translateY(-50%) rotate(-90deg);white-space:nowrap}
+.pullout-tab .tab-label{display:block;color:var(--white);font-size:13px;font-weight:700;margin:0;padding:0;line-height:1;position:absolute;left:-30px;top:50%;transform:translateY(-50%) rotate(-90deg);white-space:nowrap}
 .pullout-tab .tab-badge{display:block;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-weight:800;margin:3px 0;color:var(--white);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.06)}
 .pullout-tab .line-a-badge{background:var(--ateneo-blue);border-color:rgba(255,255,255,0.08)}
 .pullout-tab .line-b-badge{background:#0265d3;border-color:rgba(255,255,255,0.08)}
