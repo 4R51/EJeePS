@@ -90,10 +90,24 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Responsive adjustments */
 @media (max-width:520px){
-  .pullout-panel{width:220px}
-  .pullout-toggle-btn{padding:10px 10px;font-size:12px}
-  .pullout-toggle-btn .tab-badge{width:28px;height:28px;font-size:14px}
-  .pullout-toggle-btn .pull-label{font-size:11px}
+	/* Slightly wider panels on phones to improve readability */
+	.pullout-panel{width:260px}
+
+	/* Make the right-side toggle buttons larger for touch */
+	.pullout-toggle-btn{padding:14px 14px;font-size:16px}
+	.pullout-toggle-btn .tab-badge{width:40px;height:40px;font-size:18px}
+	.pullout-toggle-btn .pull-label{font-size:15px}
+
+	/* Larger stop list items */
+	.stop-btn{padding:14px 14px;font-size:15px}
+
+	/* Bottom center line toggles - bigger and easier to tap */
+	.toggle-btn{min-width:180px;padding:16px 22px;font-size:18px;border-radius:28px}
+	.line-toggle{gap:14px}
+
+	/* Adjust wrapper spacing so the stacked layout doesn't overlap */
+	#wrapper-stops-a{top:16px}
+	#wrapper-stops-b{top:120px}
 }
 
 
