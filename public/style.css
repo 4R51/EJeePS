@@ -43,42 +43,58 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 /* Ensure label and circle scale visually around anchor point */
 .station-icon .station-circle,.station-icon .station-label{transform-origin:center bottom}
 
-/* --- Pull-out tabs (right side) --- */
+/* --- Stops dropdown panels and buttons (right side) --- */
 .pullouts{position:fixed;right:12px;top:var(--header-height);bottom:18px;z-index:1400;pointer-events:auto}
-.pullout-panel{position:absolute;right:92px;top:0;width:320px;max-height:72vh;background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px;padding:12px;display:none;flex-direction:column;pointer-events:auto;z-index:1410;overflow:auto;transition:opacity .18s ease, transform .18s ease;opacity:0;transform:translateY(-6px)}
-.pullout-panel.open{display:block;opacity:1;transform:translateY(0)}
-.pullout-header{font-weight:700;color:var(--ateneo-blue);padding:6px 4px;border-bottom:1px solid rgba(0,0,0,0.06)}
-.pullout-body{overflow:auto;padding:48px 8px 8px 8px} /* leave room at the top so the close icon doesn't overlap the list */
-.stop-list{list-style:none;margin:8px 0;padding:0;display:flex;flex-direction:column;gap:6px}
-.stop-list li{padding:8px;border-radius:6px;background:rgba(3,15,35,0.03);color:#012;padding-left:10px;font-weight:600}
-.pullout-close{position:absolute;top:8px;right:8px;border:0;background:transparent;font-size:14px;padding:6px;cursor:pointer;color:#444}
 
-.pullout-toggle-btn{position:absolute;right:8px;background:var(--white);color:var(--ateneo-blue);padding:10px 12px;border-radius:8px;border:2px solid rgba(0,0,0,0.08);box-shadow:0 6px 18px rgba(0,0,0,0.14);cursor:pointer;display:flex;align-items:center;gap:8px;z-index:1420;font-weight:800}
-.pullout-toggle-btn:focus{outline:3px solid rgba(0,51,160,0.22)}
-.pullout-toggle-btn[aria-expanded="true"]{background:rgba(0,0,0,0.04)}
+/* Dropdown panels for stop lists */
+.pullout-panel{position:absolute;right:92px;top:0;width:320px;max-height:72vh;background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px;padding:12px;display:none;flex-direction:column;pointer-events:auto;z-index:1410;overflow:auto;transition:opacity 0.2s ease, transform 0.2s ease;opacity:0;visibility:hidden;transform:translateY(-6px)}
+.pullout-panel.open{display:flex;opacity:1;visibility:visible;transform:translateY(0)}
 
-/* Position the two tabs so they don't overlap; top one slightly higher */
-/* Default positions for the two right-side stop toggles */
+.pullout-close{position:absolute;top:8px;right:8px;border:0;background:transparent;font-size:14px;padding:6px;cursor:pointer;color:#666;font-weight:600}
+.pullout-close:hover{color:#000}
+
+.pullout-body{overflow:auto;padding:48px 8px 8px 8px}
+
+.stop-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.stop-list li{padding:0}
+
+.stop-btn{display:block;width:100%;padding:10px 12px;border:0;border-radius:6px;background:rgba(3,15,35,0.04);color:#012;cursor:pointer;font-weight:600;font-size:13px;text-align:left;transition:background 0.15s ease;font-family:inherit}
+.stop-btn:hover{background:rgba(3,15,35,0.08)}
+.stop-btn:active{background:rgba(3,15,35,0.12)}
+
+/* Stop list toggle buttons */
+.pullout-toggle-btn{position:absolute;right:8px;padding:12px 14px;border-radius:8px;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;z-index:1420;font-weight:700;font-size:14px;transition:all 0.2s ease;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+
+/* Line A button - Ateneo Blue #0033a0 */
+#btn-stops-a{background:var(--ateneo-blue);color:var(--white);top:12px}
+#btn-stops-a:hover{background:#002580;box-shadow:0 4px 12px rgba(0,51,160,0.24)}
+#btn-stops-a[aria-expanded="true"]{background:#001a52;color:var(--white)}
+
+/* Line B button - Lighter blue #0265d3 */
+#btn-stops-b{background:#0265d3;color:var(--white);top:84px}
+#btn-stops-b:hover{background:#0250a8;box-shadow:0 4px 12px rgba(2,101,211,0.24)}
+#btn-stops-b[aria-expanded="true"]{background:#013d7a;color:var(--white)}
+
+.pullout-toggle-btn:focus{outline:3px solid rgba(0,51,160,0.3)}
+
+/* Badge indicator showing line letter */
+.pullout-toggle-btn .tab-badge{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;font-weight:800;color:var(--white);background:rgba(255,255,255,0.25);font-size:16px}
+
+/* Label text */
+.pullout-toggle-btn .pull-label{font-weight:700;color:inherit;font-size:13px;white-space:nowrap}
+
+/* Default positions */
 #btn-stops-a{top:12px}
 #sidebar-line-a{top:0}
 #btn-stops-b{top:84px}
 #sidebar-line-b{top:72px}
 
-/* Make sure the panels look good on smaller screens: use narrower width */
+/* Responsive adjustments */
 @media (max-width:520px){
   .pullout-panel{width:220px}
-	.pullout-toggle-btn{right:6px;width:56px;padding:8px}
-	/* slightly smaller left offset for pull labels on small screens */
-	.pullout-toggle-btn .pull-label{font-size:13px}
+  .pullout-toggle-btn{padding:10px 10px;font-size:12px}
+  .pullout-toggle-btn .tab-badge{width:28px;height:28px;font-size:14px}
+  .pullout-toggle-btn .pull-label{font-size:11px}
 }
-
-/* Hide the screen-reader-only text visually but keep available to assistive tech */
-.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
-/* Make tab text more readable in vertical mode and ensure strong contrast */
-.pullout-toggle-btn .tab-badge{display:block;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;font-weight:800;color:var(--white);background:var(--ateneo-blue);border:0}
-.pullout-toggle-btn .pull-label{font-weight:800;color:var(--ateneo-blue);font-size:14px}
-.pullout-toggle-btn .line-a-badge{background:var(--ateneo-blue)}
-.pullout-toggle-btn .line-b-badge{background:#0265d3}
 
 
