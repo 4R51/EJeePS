@@ -44,8 +44,8 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .station-icon .station-circle,.station-icon .station-label{transform-origin:center bottom}
 
 /* --- Pull-out tabs (right side) --- */
-.pullouts{position:fixed;right:12px;top:var(--header-height);bottom:18px;z-index:1400;pointer-events:none}
-.pullout-panel{position:absolute;right:0;top:0;width:320px;height:calc(100% - 12px);background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px 0 0 8px;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.2,1);overflow:hidden;padding:12px;display:flex;flex-direction:column;pointer-events:auto}
+.pullouts{position:fixed;right:12px;top:var(--header-height);bottom:18px;z-index:1400;pointer-events:auto}
+.pullout-panel{position:absolute;right:0;top:0;width:320px;height:calc(100% - 12px);background:var(--white);box-shadow:0 8px 32px rgba(0,0,0,0.18);border-radius:8px 0 0 8px;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.9,.2,1);overflow:hidden;padding:12px;display:flex;flex-direction:column;pointer-events:auto;z-index:1410}
 .pullout-panel.open{transform:translateX(0)}
 .pullout-header{font-weight:700;color:var(--ateneo-blue);padding:6px 4px;border-bottom:1px solid rgba(0,0,0,0.06)}
 .pullout-body{overflow:auto;padding:48px 8px 8px 8px} /* leave room at the top so the close icon doesn't overlap the list */
