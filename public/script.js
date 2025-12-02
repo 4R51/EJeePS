@@ -358,7 +358,6 @@ function initPullouts() {
   // Initial positioning
   repositionWrappers();
   window.addEventListener('resize', repositionWrappers);
-  });
 }
 
 // initialize pullouts after DOM is ready
