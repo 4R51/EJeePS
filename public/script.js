@@ -1,11 +1,22 @@
 // Create the map centered at Ateneo campus
 // Fixed map centered at Ateneo campus
 // Limit map interactions to a tight bounding box around Ateneo (stations)
-// This prevents users from panning too far away and disallows zooming out past level 16
+// This prevents users from panning too far away and enforces a minimum zoom level
+// Minimum zoom depends on viewport aspect: horizontal -> 16, vertical -> 17
+function preferredMinZoomForAspect() {
+  try {
+    return window.innerWidth >= window.innerHeight ? 16 : 17;
+  } catch (e) {
+    return 16;
+  }
+}
+
+const initialMinZoom = preferredMinZoomForAspect();
+
 const map = L.map("map", {
   center: [14.6394, 121.0789],
   zoom: 16,
-  minZoom: 16, // don't allow zooming out past 16
+  minZoom: initialMinZoom,
   // Slightly padded bounds derived from station coords (SW, NE)
   maxBounds: L.latLngBounds([
     [14.633675319061712, 121.07404641949906],
@@ -14,6 +25,22 @@ const map = L.map("map", {
   maxBoundsViscosity: 1.0, // make panning constrained to the bounds
   zoomControl: true
 });
+
+// Update minZoom responsively when the window / orientation changes
+function updateMinZoomForAspect() {
+  const newMin = preferredMinZoomForAspect();
+  // If Leaflet exposes setMinZoom use it, otherwise update options directly
+  if (typeof map.setMinZoom === 'function') {
+    map.setMinZoom(newMin);
+  } else {
+    map.options.minZoom = newMin;
+  }
+
+  // If we're currently zoomed out further (smaller number) than allowed, bump to allowed minimum
+  if (map.getZoom && map.getZoom() < newMin) {
+    map.setZoom(newMin);
+  }
+}
 
 // Add OpenStreetMap tiles
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -69,9 +96,14 @@ window.addEventListener("load", () => {
   // Small timeout to wait for CSS/DOM layout to settle
   setTimeout(() => {
     map.invalidateSize();
+    // ensure minZoom is correct for current aspect
+    try { updateMinZoomForAspect(); } catch (e) {}
   }, 50);
 });
-window.addEventListener("resize", () => map.invalidateSize());
+window.addEventListener("resize", () => {
+  map.invalidateSize();
+  try { updateMinZoomForAspect(); } catch (e) {}
+});
 
 /* -------------------- Station toggles & markers -------------------- */
 
@@ -207,8 +239,8 @@ function initPullouts() {
       btn.dataset.lat = s.lat;
       btn.dataset.lng = s.lng;
       btn.addEventListener('click', () => {
-        // Center on the stop and zoom in a touch
-        map.setView([s.lat, s.lng], Math.max(17, map.getZoom()), { animate: true });
+        // Center on the stop and zoom in
+        map.setView([s.lat, s.lng], Math.max(20, map.getZoom()), { animate: true });
         // Close panel after selection
         panelA.classList.remove('open');
         panelB.classList.remove('open');

@@ -30,7 +30,11 @@
       </div>
     </div>
 
-    <button id="tab-line-a" class="pullout-tab" aria-controls="sidebar-line-a" aria-expanded="false"><span class="tab-main">Line A</span><span class="sr-only"> stops</span></button>
+    <button id="tab-line-a" class="pullout-tab" aria-controls="sidebar-line-a" aria-expanded="false" aria-label="Open Line A stops">
+      <span class="tab-badge line-a-badge" aria-hidden="true">A</span>
+      <span class="tab-label">Line A</span>
+      <span class="sr-only"> stops</span>
+    </button>
 
     <div id="sidebar-line-b" class="pullout-panel" aria-labelledby="tab-line-b" role="region" aria-label="Line B stops">
       <button class="pullout-close" aria-label="Close Line B stops">✕</button>
@@ -40,7 +44,11 @@
       </div>
     </div>
 
-    <button id="tab-line-b" class="pullout-tab" aria-controls="sidebar-line-b" aria-expanded="false"><span class="tab-main">Line B</span><span class="sr-only"> stops</span></button>
+    <button id="tab-line-b" class="pullout-tab" aria-controls="sidebar-line-b" aria-expanded="false" aria-label="Open Line B stops">
+      <span class="tab-badge line-b-badge" aria-hidden="true">B</span>
+      <span class="tab-label">Line B</span>
+      <span class="sr-only"> stops</span>
+    </button>
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

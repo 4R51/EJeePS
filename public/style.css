@@ -75,6 +75,10 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 
 /* Make tab text more readable in vertical mode and ensure strong contrast */
 .pullout-tab .tab-main{display:block;color:var(--white);font-size:13px;line-height:1;text-transform:none;padding:0 2px}
+.pullout-tab .tab-label{display:inline-block;color:var(--white);font-size:13px;font-weight:700;margin-left:6px}
+.pullout-tab .tab-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:800;margin-right:6px;color:var(--white);background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06)}
+.pullout-tab .line-a-badge{background:var(--ateneo-blue);border-color:rgba(255,255,255,0.08)}
+.pullout-tab .line-b-badge{background:#0265d3;border-color:rgba(255,255,255,0.08)}
 .pullout-tab .tab-main::after{content:'';display:block;height:2px;margin-top:4px;width:100%;opacity:.05}
 
 
