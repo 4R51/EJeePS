@@ -260,7 +260,7 @@ function initPullouts() {
       btn.dataset.lng = s.lng;
       btn.addEventListener('click', () => {
         // Center on the stop and zoom in
-        map.setView([s.lat, s.lng], Math.max(17, map.getZoom()), { animate: true });
+        map.setView([s.lat, s.lng], Math.max(20, map.getZoom()), { animate: true });
         // Close panels after selection
         panelA.classList.remove('open');
         panelB.classList.remove('open');
