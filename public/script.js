@@ -371,23 +371,27 @@ function initPullouts() {
         return;
       }
       
-      // Calculate positions needed to avoid overlap with any open panels
+      // Always start with base positions
+      toggleA.style.top = baseTopA + 'px';
+      toggleB.style.top = baseTopB + 'px';
+      
+      // Position panels and move buttons to avoid them
       if (panelAOpen) {
-        // Keep Button A at base, move Button B below Panel A if needed
-        toggleA.style.top = baseTopA + 'px';
-        
         // Position Panel A dropdown below Button A
         const toggleARect = toggleA.getBoundingClientRect();
         const panelATopPos = Math.round(toggleARect.top - containerRect.top + toggleARect.height + 8);
         panelA.style.top = panelATopPos + 'px';
         
-        const desiredTopForB = Math.ceil(toggleARect.bottom - containerRect.top + toggleGap);
-        const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
-        toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
-      } else {
-        // Panel A is not open, Button B can go to base position
-        toggleB.style.top = baseTopB + 'px';
-        toggleA.style.top = baseTopA + 'px';
+        // Calculate Panel A's bottom to know where to move Button B
+        const panelARect = panelA.getBoundingClientRect();
+        const panelABottom = panelARect.bottom - containerRect.top;
+        
+        // Move Button B below Panel A if there's overlap
+        if (panelABottom > baseTopB) {
+          const desiredTopForB = Math.ceil(panelABottom + toggleGap);
+          const maxTopB = Math.max(containerRect.height - toggleHeight, baseTopB);
+          toggleB.style.top = Math.min(desiredTopForB, maxTopB) + 'px';
+        }
       }
       
       // If Panel B is also open, position it below Button B
