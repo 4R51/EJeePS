@@ -375,7 +375,7 @@ function initPullouts() {
       toggleA.style.top = baseTopA + 'px';
       toggleB.style.top = baseTopB + 'px';
       
-      // Position panels and move buttons to avoid them
+      // Position Panel A and move Button B if needed
       if (panelAOpen) {
         // Position Panel A dropdown below Button A
         const toggleARect = toggleA.getBoundingClientRect();
@@ -394,8 +394,9 @@ function initPullouts() {
         }
       }
       
-      // If Panel B is also open, position it below Button B
+      // Position Panel B below its button (which may have moved due to Panel A)
       if (panelBOpen) {
+        // Get fresh rect for Button B (it may have moved)
         const toggleBRect = toggleB.getBoundingClientRect();
         const panelBTopPos = Math.round(toggleBRect.top - containerRect.top + toggleBRect.height + 8);
         panelB.style.top = panelBTopPos + 'px';
