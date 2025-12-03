@@ -91,6 +91,22 @@ async function fetchLocation() {
 // Poll every 3 seconds
 setInterval(fetchLocation, 3000);
 
+// Update EJeep info box (line, next station, ETA)
+function updateEJeepInfo() {
+  // For now, populate with placeholder data
+  // TODO: integrate with real backend data for line, next station, and ETA
+  const infoLine = document.getElementById('ejeep-line');
+  const infoNextStation = document.getElementById('ejeep-next-station');
+  const infoETA = document.getElementById('ejeep-eta');
+
+  if (infoLine) infoLine.textContent = 'Line A EJeep';
+  if (infoNextStation) infoNextStation.textContent = 'Xavier Hall';
+  if (infoETA) infoETA.textContent = '7 minutes';
+}
+
+// Initialize info box
+updateEJeepInfo();
+
 // Ensure the map recalculates size after the banner is rendered and on window resize
 window.addEventListener("load", () => {
   // Small timeout to wait for CSS/DOM layout to settle

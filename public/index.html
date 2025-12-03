@@ -14,6 +14,21 @@
 
   <div id="map"></div>
 
+  <!-- EJeep info box (line, next station, ETA) -->
+  <div id="ejeep-info-box" class="ejeep-info-box">
+    <div class="ejeep-info-content">
+      <div class="ejeep-info-line" id="ejeep-line">Line A EJeep</div>
+      <div class="ejeep-info-next-station">
+        <span class="ejeep-label">Next Station:</span>
+        <span id="ejeep-next-station">Xavier Hall</span>
+      </div>
+      <div class="ejeep-info-eta">
+        <span class="ejeep-label">ETA:</span>
+        <span id="ejeep-eta">7 minutes</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Line toggles (bottom center) -->
   <div id="line-toggle" class="line-toggle" role="toolbar" aria-label="Line toggles">
     <button id="btn-line-a" class="toggle-btn active" data-line="a" aria-pressed="true">Line A</button>
