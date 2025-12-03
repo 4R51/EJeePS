@@ -107,6 +107,15 @@ function updateEJeepInfo() {
 // Initialize info box
 updateEJeepInfo();
 
+// Handle info box click to zoom to GPS marker
+const infoBox = document.getElementById('ejeep-info-box');
+if (infoBox) {
+  infoBox.addEventListener('click', () => {
+    // Zoom to marker location with a nice animation
+    map.flyTo([lastValidCoords.lat, lastValidCoords.lng], 18, { duration: 1.5 });
+  });
+}
+
 // Ensure the map recalculates size after the banner is rendered and on window resize
 window.addEventListener("load", () => {
   // Small timeout to wait for CSS/DOM layout to settle

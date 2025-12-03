@@ -14,8 +14,8 @@
 
   <div id="map"></div>
 
-  <!-- EJeep info box (line, next station, ETA) -->
-  <div id="ejeep-info-box" class="ejeep-info-box">
+  <!-- EJeep info box (line, next station, ETA) - clickable to zoom to marker -->
+  <button id="ejeep-info-box" class="ejeep-info-box" aria-label="Click to zoom to EJeep location">
     <div class="ejeep-info-content">
       <div class="ejeep-info-line" id="ejeep-line">Line A EJeep</div>
       <div class="ejeep-info-next-station">
@@ -27,7 +27,7 @@
         <span id="ejeep-eta">7 minutes</span>
       </div>
     </div>
-  </div>
+  </button>
 
   <!-- Line toggles (bottom center) -->
   <div id="line-toggle" class="line-toggle" role="toolbar" aria-label="Line toggles">
