@@ -29,7 +29,7 @@ html,body{height:100%;margin:0;padding:0;font-family:system-ui,-apple-system,"Se
 .leaflet-container{background:transparent}
 
 /* --- EJeep info box --- */
-.ejeep-info-box{position:fixed;top:calc(var(--header-height) + 12px);left:12px;background:var(--white);border-radius:8px;padding:12px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.12);max-width:280px;z-index:999;font-size:13px;line-height:1.5}
+.ejeep-info-box{position:fixed;bottom:92px;left:12px;background:var(--white);border-radius:8px;padding:12px 16px;box-shadow:0 2px 8px rgba(0,0,0,0.12);max-width:280px;z-index:999;font-size:13px;line-height:1.5}
 .ejeep-info-content{display:flex;flex-direction:column;gap:8px}
 .ejeep-info-line{font-weight:700;color:var(--ateneo-blue);font-size:14px}
 .ejeep-info-next-station,.ejeep-info-eta{display:flex;gap:6px}
